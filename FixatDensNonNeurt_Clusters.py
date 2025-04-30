@@ -7,6 +7,11 @@ import matplotlib.pyplot as plt
 import random
 from scipy import special as sp
 
+"""
+How to run this script?
+python3 FixatDensNonNeurt_Clusters.py --N 10 --b_s 1.01 --mut_freq 0.5 --init_config 1 --plot_flag False
+"""
+
 ###non-neutral case; construct density functions for arbitrary initial distribution#########
 # 0s are the mutants!
 

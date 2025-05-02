@@ -68,14 +68,10 @@ def tracking(nm_fl, dim):   #input files: "contour_nm_fl.csv" and "bacteria_nm_f
     left_pole_bact_per_frame_x, left_pole_bact_per_frame_y, right_pole_bact_per_frame_x, right_pole_bact_per_frame_y, left_pole_bact_per_frame_x_ori, left_pole_bact_per_frame_y_ori, right_pole_bact_per_frame_x_ori, right_pole_bact_per_frame_y_ori  =  bact_poles(contour_per_frame_centr, name_centers_per_frame, name_contour_per_frame)
     
     std_left_pole_x_glob, std_left_pole_y_glob, std_right_pole_x_glob, std_right_pole_y_glob = poles_per_frame(centers_x_per_frame, centers_y_per_frame, width_per_frame, orient_per_frame, left_pole_bact_per_frame_x, left_pole_bact_per_frame_y, right_pole_bact_per_frame_x, right_pole_bact_per_frame_y)
-        
-
-    
     
     print("Calculating local structures...")    
 
-    print(f"centrs = {[len(name_centers_per_frame[j]) for j in range(len(name_centers_per_frame))]}")
-    print(f"orient = {[len(orient_per_frame[j]) for j in range(len(orient_per_frame))]}")
+    print(f"number of cells per frames = {[len(name_centers_per_frame[j]) for j in range(len(name_centers_per_frame))]}")
 
     local_str = []
     for j in range(len(name_centers_per_frame)):

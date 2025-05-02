@@ -94,17 +94,15 @@ def rotate_contour_per_frame(contour_per_frame_centr, nm_fl):
         arr_y_for_x_neg = []  
         arr_y_for_x_posit = []      
         count = 0
-        print('min: ', min_x)
-        print('max: ', max_x)
+        # print('min: ', min_x)
+        # print('max: ', max_x)
        # print('min22: ', min(contour_per_frame_centr[j][i]))
        # print('max22: ', max(contour_per_frame_centr[j][i]))
         # I assume: the distance between min_x and max_x was supposed to be 100 beforehanf
         # i will determine the new distance and change the thresholds accordingly, so that contours (?) will be sorted (to left and right?) accordingly
 
         center_of_trap_threshold = min_x + (max_x - min_x)/2
-        print('center: ', center_of_trap_threshold)
-
-    
+        # print('center: ', center_of_trap_threshold)
 
         for i in range(len(contour_per_frame_centr[j])):
             #if contour_per_frame_centr[j][i][0] < min_x+50: 

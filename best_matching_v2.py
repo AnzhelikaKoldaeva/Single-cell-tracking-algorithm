@@ -112,6 +112,7 @@ def find_best_matching(b, c, possible_combs):
     for comb in combs:
         cur_step = cur_step_from_comb(c, b, comb)
         score = total_diff(b, cur_step)
+       # print(f"best_score = {best_score}; score = {score}")
         if score < best_score:
             best_score = score
             best_comb = comb

@@ -8,8 +8,8 @@ def read_contour_csv(file_name_con):
         row1 = next(data)
         ind_name = row1.index('NAME.id')
         ind_posit = row1.index('POSITION')  
-        ind_x_cont = row1.index('X')  
-        ind_y_cont = row1.index('Y')  
+        ind_x_cont = row1.index('COORD.x')  
+        ind_y_cont = row1.index('COORD.y')  
         name_cont = []
         posit_cont = [] 
         x_cont = [] 
@@ -96,8 +96,8 @@ def rotate_contour_per_frame(contour_per_frame_centr, nm_fl):
         count = 0
         print('min: ', min_x)
         print('max: ', max_x)
-        print('min22: ', min(contour_per_frame_centr[j][i]))
-        print('max22: ', max(contour_per_frame_centr[j][i]))
+       # print('min22: ', min(contour_per_frame_centr[j][i]))
+       # print('max22: ', max(contour_per_frame_centr[j][i]))
         # I assume: the distance between min_x and max_x was supposed to be 100 beforehanf
         # i will determine the new distance and change the thresholds accordingly, so that contours (?) will be sorted (to left and right?) accordingly
 
@@ -305,6 +305,7 @@ def Hausdorff_dist(j,D1, D2, centers_x_per_frame, centers_y_per_frame, left_pole
 
 def MC_two_str(j,q,s,alpha, local_str, centers_x_per_frame, centers_y_per_frame, left_pole_bact_per_frame_y, right_pole_bact_per_frame_y): # similarity between 2 local structures: around cell q from jth frame and cell s from (j+1)th frame
     MT = []
+    print(f"local_str[j][q] = {local_str[j][q]}")
     for qi in range(len(local_str[j][q])):
         D2 = local_str[j][q][qi]
         for si in range(len(local_str[j+1][s])):

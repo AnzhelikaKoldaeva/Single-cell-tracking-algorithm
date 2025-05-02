@@ -47,8 +47,8 @@ from utils.read_files import best_of_two_candidates, end_cells, inside_rect, pol
 def tracking(nm_fl, dim):   #input files: "contour_nm_fl.csv" and "bacteria_nm_fl.csv"; input value dim = number of rows
     print("Reading the files...")
 
-    file_name_con = 'contour_'+nm_fl+'.csv'
-    file_name_bac = 'bacteria_'+nm_fl+'.csv'
+    file_name_con = 'input/contour_'+nm_fl+'.csv'
+    file_name_bac = 'input/bacteria_'+nm_fl+'.csv'
 
     name_cont, posit_cont, x_cont, y_cont = read_contour_csv(file_name_con)
 
@@ -71,26 +71,35 @@ def tracking(nm_fl, dim):   #input files: "contour_nm_fl.csv" and "bacteria_nm_f
         
 
     
-    if dim != 1:
-        print("Calculating local structures...")    
     
-        local_str = []
-        for j in range(len(name_centers_per_frame)):
-            print("local structure for j = "+str(j))
-            local_str.append([])
-            for q in range(len(name_centers_per_frame[j])):
-                local_str[-1].append([])
-                for q1 in range(len(name_centers_per_frame[j])):
-                        for q2 in range(q1,len(name_centers_per_frame[j])):
-                                if((q-q1)*(q-q2)*(q1-q2) !=0 and angle_three_points(j, q, q1, q2, centers_x_per_frame, centers_y_per_frame) < 170 and angle_three_points(j, q, q1, q2, centers_x_per_frame, centers_y_per_frame) > 2):
-                                    count = 0
-                                    for t in range(len(name_centers_per_frame[j])):
-                                        if((t-q)*(t-q1)*(t-q2) != 0):
-                                            if(inside_circle(j,q,q1,q2,t, centers_x_per_frame, centers_y_per_frame) == "not inside"):
-                                                count = count+1
-                                    if(count == len(name_centers_per_frame[j])-3):
-                                        local_str[j][-1].append((q,q1,q2))                               
+    print("Calculating local structures...")    
 
+    print(f"centrs = {[len(name_centers_per_frame[j]) for j in range(len(name_centers_per_frame))]}")
+    print(f"orient = {[len(orient_per_frame[j]) for j in range(len(orient_per_frame))]}")
+
+    local_str = []
+    for j in range(len(name_centers_per_frame)):
+       # print("local structure for j = "+str(j))
+        local_str.append([])
+        for q in range(len(name_centers_per_frame[j])):
+           # print(f"q = {q}")
+            local_str[-1].append([])
+           # print(f"len(name_centers_per_frame[j]) = {len(name_centers_per_frame[j])}")
+            for q1 in range(len(name_centers_per_frame[j])):
+                    for q2 in range(q1,len(name_centers_per_frame[j])):
+                            if((q-q1)*(q-q2)*(q1-q2) !=0 and angle_three_points(j, q, q1, q2, centers_x_per_frame, centers_y_per_frame) < 170 and angle_three_points(j, q, q1, q2, centers_x_per_frame, centers_y_per_frame) > 2):
+                                count = 0
+                                for t in range(len(name_centers_per_frame[j])):
+                                    if((t-q)*(t-q1)*(t-q2) != 0):
+                                        if(inside_circle(j,q,q1,q2,t, centers_x_per_frame, centers_y_per_frame) == "not inside"):
+                                            count = count+1
+                                if(count == len(name_centers_per_frame[j])-3):
+                                    local_str[j][-1].append((q,q1,q2))      
+
+   # print(f"local_str = {local_str}")                                                         
+        
+
+    if dim != 1:
         #6. Main loop      
         print("Starting tracking...")
         
@@ -104,7 +113,6 @@ def tracking(nm_fl, dim):   #input files: "contour_nm_fl.csv" and "bacteria_nm_f
         tracking_names.append(np.ndarray.tolist(name_centers_per_frame[0]))
         mitos_global = []
         for j in range(0,len(name_centers_per_frame)-1): 
-            print(j)
             R=[]
             tracking_names.append([0]*len(name_centers_per_frame[j+1]))
             alpha_loop = 10
@@ -113,7 +121,6 @@ def tracking(nm_fl, dim):   #input files: "contour_nm_fl.csv" and "bacteria_nm_f
                     MC = [0]*len(local_str[j+1])
                     for s in range_from_the_middle(j+1, centers_x_per_frame):
                         MC[s] = MC_two_str(j,q,s,alpha_loop, local_str, centers_x_per_frame, centers_y_per_frame, left_pole_bact_per_frame_y, right_pole_bact_per_frame_y)
-                    print(f"MC = {MC}")    
                     if (MC.count(1) == 1):
                         ind = MC.index(1)
                         R.append((q,ind))   # 1st from j, 2nd from (j+1)
@@ -256,9 +263,15 @@ def tracking(nm_fl, dim):   #input files: "contour_nm_fl.csv" and "bacteria_nm_f
         precomputing_time = time.time()
         compute_combs_fast(possible_combs)
         print("--- precomputing time: %s seconds ---" % (time.time() - precomputing_time))
+
+       # print(f"len(name_centers_per_frame) = {len(name_centers_per_frame)}")
+
+       # print(f"possible_combs = {possible_combs}")
+
         
-        for j in range(0,len(name_centers_per_frame)-1):
-            print(j)
+        # Iterating over all frames
+        for j in range(len(name_centers_per_frame)-1):
+            print(f"len(name_centers_per_frame[j]) = {len(name_centers_per_frame[j])}")
             R = []
             tracking_names.append([0]*len(name_centers_per_frame[j+1]))
             
@@ -270,6 +283,8 @@ def tracking(nm_fl, dim):   #input files: "contour_nm_fl.csv" and "bacteria_nm_f
             
             a = [[length_per_frame[j][l], orient_per_frame[j][l]] for l in a_ind_sorted]
             b = [[length_per_frame[j+1][l], orient_per_frame[j+1][l]] for l in b_ind_sorted]
+
+           # 
             
             best_matching = find_best_matching(a, b, possible_combs)
             
@@ -328,8 +343,8 @@ def tracking(nm_fl, dim):   #input files: "contour_nm_fl.csv" and "bacteria_nm_f
     f.close()      
 
 if __name__ == '__main__':
-    nm_fl = "2"
-    dim = "2"
+    nm_fl = "250205_075um_03_combined"
+    dim = 1#"1"
     tracking(nm_fl, dim)
 
     

@@ -28,10 +28,12 @@ def generate_combs_from_n(n, result, cur = [], first_nonzero = False, last_nonze
           generate_combs_from_n(n-1, result, new_cur, first_nonzero, last_nonzero)
 
 def compute_combs_fast(possible_combs, n_max = 20):
+    #n_max = number of frames
     for n in range(3, n_max + 1):
-         print(n)
+        # print(f"n = {n}")
          for idx in range(2 * n):
               tup = n, idx+1
+             # print(f"tup = {tup}")
               possible_combs[tup] = []
          res = []
          generate_combs_from_n(n, res)
